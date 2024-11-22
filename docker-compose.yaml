@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  db:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ms-logistica
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${USER_POSTGRES}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gateway:
+    container_name: 'API-GATEWAY'
+    image: 'api-gateway:1.0'
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+
+  eureka:
+    container_name: 'EUREKA-SERVER'
+    image: 'eureka:1.0'
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+
+  aplication-logistica:
+    container_name: 'MS-LOGISTICA'
+    image: 'ms-logistica:1.0'
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ms-logistica
+      SPRING_DATASOURCE_USERNAME: ${USER_POSTGRES}
+      SPRING_DATASOURCE_PASSWORD: ${PASSWORD_POSTGRES}
