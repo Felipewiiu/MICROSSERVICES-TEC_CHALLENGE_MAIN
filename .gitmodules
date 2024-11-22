@@ -1,0 +1,9 @@
+[submodule "API_GATEWAY"]
+	path = API_GATEWAY
+	url = https://github.com/Felipewiiu/API_GATEWAY.git
+[submodule "EUREKA-SERVER"]
+	path = EUREKA-SERVER
+	url = https://github.com/Felipewiiu/EUREKA-SERVER.git
+[submodule "MS-LOGISTICA"]
+	path = MS-LOGISTICA
+	url = https://github.com/Felipewiiu/MS-LOGISTICA.git
