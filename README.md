@@ -33,6 +33,12 @@
    ```
 9. **Docker:** para subir os container Dokers basta seguir os comandos:
 
+- Para buildar as imagem, vá para o diretório de cada MICROSSERVICE e digite o comando abaixo PARA CRIAR AS IMAGENS DOCKER:
+````shell
+make docker-build
+
+````
+
 - Crie as váriáveis de ambiente (.env) :
 
 ```text
@@ -44,11 +50,6 @@ PASSWORD_POSTGRES=root
     docker-compose -f docker-compose.yaml config
 ```
 
-- Para buildar as imagem, vá para o diretório de cada MICROSSERVICE e digite o comando abaixo PARA CRIAR AS IMAGENS DOCKER:
-````shell
-make docker-build
-
-````
 - Para subir os containers, vá para a raíz do projeto principal e digite:
 ````shell
 make docker-start
