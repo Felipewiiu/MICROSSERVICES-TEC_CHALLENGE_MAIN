@@ -7,3 +7,6 @@
 [submodule "MS-LOGISTICA"]
 	path = MS-LOGISTICA
 	url = https://github.com/Felipewiiu/MS-LOGISTICA.git
+[submodule "MS-PRODUCT_CATALOG"]
+	path = MS-PRODUCT_CATALOG
+	url = https://github.com/Felipewiiu/MS-PRODUCT_CATALOG.git
