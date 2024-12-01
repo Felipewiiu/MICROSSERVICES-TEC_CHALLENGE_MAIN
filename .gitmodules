@@ -10,3 +10,6 @@
 [submodule "MS-PRODUCT_CATALOG"]
 	path = MS-PRODUCT_CATALOG
 	url = https://github.com/Felipewiiu/MS-PRODUCT_CATALOG.git
+[submodule "ms-client"]
+	path = ms-client
+	url = https://github.com/marcello222/ms-client.git
