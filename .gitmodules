@@ -13,3 +13,6 @@
 [submodule "ms-client"]
 	path = ms-client
 	url = https://github.com/marcello222/ms-client.git
+[submodule "ms-pedidos"]
+	path = ms-pedidos
+	url = https://github.com/Kleuber7/ms-pedidos.git

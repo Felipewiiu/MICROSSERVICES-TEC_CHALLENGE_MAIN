@@ -9,6 +9,7 @@
         <option value="$PROJECT_DIR$/EUREKA-SERVER/pom.xml" />
         <option value="$PROJECT_DIR$/MS-PRODUCT-MANAGEMENT/pom.xml" />
         <option value="$PROJECT_DIR$/MS-PRODUCT_CATALOG/pom.xml" />
+        <option value="$PROJECT_DIR$/ms-client/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

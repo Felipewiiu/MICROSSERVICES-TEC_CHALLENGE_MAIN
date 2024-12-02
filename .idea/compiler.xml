@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="EurekaServer" />
         <module name="ms-logistica" />
+        <module name="MS-CLIENTE" />
         <module name="MS-PRODUCT-MANAGEMENT" />
         <module name="gateway" />
       </profile>
@@ -17,6 +18,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="EurekaServer" options="-parameters" />
+      <module name="MS-CLIENTE" options="-parameters" />
       <module name="MS-PRODUCT-MANAGEMENT" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="ms-logistica" options="-parameters" />
