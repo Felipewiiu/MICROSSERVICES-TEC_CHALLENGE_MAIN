@@ -1,6 +1,0 @@
-
-š	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(’Ö˜úÿÿÿÿJ$dc6c5da4-49ae-452f-867d-55983b4f8342
-¡
-java:S1128"`Remove this unused import 'br.com.mslogistica.ms_logistica.domain.valueobjects.CurrentLocation'.(áÀÖ«ùÿÿÿÿJ$690be33f-a0cf-4749-8f08-a58ccba27787
-„
-java:S1128"CRemove this unused import 'jakarta.validation.constraints.Pattern'.(Îá˜ãúÿÿÿÿJ$c778db5f-0eff-4197-ab95-07b9fc412cbe
