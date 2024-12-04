@@ -1,0 +1,132 @@
+version: '3.9'
+services:
+
+  eureka-server-app:
+    container_name: 'APP-EUREKA-SERVER'
+    build:
+      context: ./OMS-MS-EUKERA-SERVER
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT_EUREKA_SERVER}:${PORT_EUREKA_SERVER}"
+
+  api-gateway-app:
+    container_name: 'APP-API-GATEWAY'
+    build:
+      context: ./OMS-MS-API-GATEWAY
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT_API_GATEWAY}:${PORT_API_GATEWAY}"
+    depends_on:
+      -   eureka-server
+
+  customer-management-db:
+    container_name: 'POSTGRES-CUSTOMER-MANAGEMENT'
+    image: 'postgres:bookworm'
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ${DATABESE_POSTGRES_CUSTOMER_MANAGEMENT}
+    ports:
+      - "${PORT_POSTGRES_CUSTOMER_MANAGEMENT}:${PORT_POSTGRES_CUSTOMER_MANAGEMENT}"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${USER_POSTGRES}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      -  api-gateway
+
+  customer-management-app:
+    container_name: 'APP-CUSTOMER-MANAGEMENT'
+    build:
+      context: ./OMS-MS-CUSTOMER-MANAGEMENT
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT_CUSTOMER-MANAGEMENT}:${PORT_CUSTOMER-MANAGEMENT}"
+    depends_on:
+      -  customer-management-db
+
+  product-catalog-db:
+    container_name: 'POSTGRES-PRODUCT-CATALOG'
+    image: 'postgres:bookworm'
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ${DATABESE_POSTGRES_PRODUCT_CATALOG}
+    ports:
+      - "${PORT_POSTGRES_PRODUCT_CATALOG}:${PORT_POSTGRES_PRODUCT_CATALOG}"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${USER_POSTGRES}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  order-management-db:
+    container_name: 'POSTGRES-ORDER_MANAGEMENT'
+    image: 'postgres:bookworm'
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ${DATABESE_POSTGRES_ORDER_MANAGEMENT}
+    ports:
+      - "${PORT_POSTGRES_ORDER_MANAGEMENT}:${PORT_POSTGRES_ORDER_MANAGEMENT}"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${USER_POSTGRES}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  delivery-logistics-db:
+    container_name: 'POSTGRES-DELIIVERY_LOGISTICS'
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: ${USER_POSTGRES}
+      POSTGRES_PASSWORD: ${PASSWORD_POSTGRES}
+      POSTGRES_DB: ${DATABESE_POSTGRES_DELIIVERY_LOGISTICS}
+    ports:
+      - "${PORT_POSTGRES_DELIIVERY_LOGISTICS}:${PORT_POSTGRES_DELIIVERY_LOGISTICS}"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${USER_POSTGRES}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    entrypoint: >
+      /bin/bash -c "
+        rabbitmq-server &
+        sleep 10 &&
+        rabbitmqctl wait /var/lib/rabbitmq/mnesia/rabbit@$(hostname).pid &&
+        rabbitmqctl add_vhost / &&
+        rabbitmqctl set_permissions -p / guest '.*' '.*' '.*' &&
+        rabbitmqadmin declare exchange name=order-request-exchange type=direct &&
+        rabbitmqadmin declare exchange name=order-response-error-exchange type=direct &&
+        rabbitmqadmin declare exchange name=order-response-successful-exchange type=direct &&
+        rabbitmqadmin declare queue name=order-request-queue durable=true &&
+        rabbitmqadmin declare queue name=order-response-error-queue durable=true &&
+        rabbitmqadmin declare queue name=order-response-successful-queue durable=true &&
+        rabbitmqadmin --vhost=/ declare binding source=order-request-exchange destination=order-request-queue routing_key=order-request-rout-key &&
+        rabbitmqadmin --vhost=/ declare binding source=order-response-error-exchange destination=order-response-error-queue routing_key=order-response-error-rout-key &&
+        rabbitmqadmin --vhost=/ declare binding source=order-response-successful-exchange destination=order-response-successful-queue routing_key=order-response-successful-rout-key &&
+        tail -f /dev/null
+      "
+
+
+volumes:
+  rabbitmq_data:
+
+
+
+
+
+
+
+
+
